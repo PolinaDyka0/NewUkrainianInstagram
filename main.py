@@ -7,12 +7,15 @@ from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from src.database.db import get_db
+from src.routes import auth
 
 app = FastAPI()
 
 templates = Jinja2Templates(directory='templates')
 app.mount('/static', StaticFiles(directory="static"), name='static')
 
+#маршрут з автентифікацією
+app.include_router(auth.router, prefix="/api")
 
 @app.get('/', response_class=HTMLResponse)
 def home(request: Request):
@@ -32,4 +35,4 @@ def healthchecker(db: Session = Depends(get_db)):
 
 
 if __name__ == '__main__':
-    uvicorn.run(app, host='localhost', port=8000)
+    uvicorn.run(app, host='localhost', port=8001)
